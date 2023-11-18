@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppointmentsScreen extends StatefulWidget {
-
   final String selectedService;
-  const AppointmentsScreen({Key? key, required this.selectedService})
-      : super(key: key);
+
+  const AppointmentsScreen({Key? key, required this.selectedService}) : super(key: key);
 
   @override
   State<AppointmentsScreen> createState() => _AppointmentsScreenState();
 }
 
 class _AppointmentsScreenState extends State<AppointmentsScreen> {
-
   late String selectedService;
-  final CollectionReference appointments =
-  FirebaseFirestore.instance.collection('Appointments');
+  final CollectionReference appointments = FirebaseFirestore.instance.collection('Appointments');
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedService = widget.selectedService;
   }
@@ -28,7 +24,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appointments for ${widget.selectedService}'),
+        title: Text('Appointments for $selectedService'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: appointments.snapshots(),
@@ -53,7 +49,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SlotsPage(date: date, selectedService: widget.selectedService,),
+                      builder: (context) => SlotsPage(date: date, selectedService: selectedService),
                     ),
                   );
                 },
@@ -66,27 +62,22 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   }
 }
 
-
 class SlotsPage extends StatelessWidget {
   final String date;
   final String selectedService;
 
   const SlotsPage({required this.date, required this.selectedService});
 
-  confirmBooking(){
-
-  }
-
-  Future<void> showPopup(BuildContext context, String slot) async {
+  Future<void> showPopup(BuildContext context, String slot, String date, String selectedService) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Popup Title'),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('This is a simple popup for $slot.'),
+                Text('Are you sure you want to book this slot?'),
               ],
             ),
           ),
@@ -99,8 +90,9 @@ class SlotsPage extends StatelessWidget {
               child: const Text('Close'),
             ),
             TextButton(
-              onPressed: (){
-
+              onPressed: () async {
+                await confirmBooking(slot, date);
+                Navigator.of(context).pop(); // Close the popup after confirming
               },
               child: const Text('Confirm'),
             )
@@ -110,6 +102,35 @@ class SlotsPage extends StatelessWidget {
     );
   }
 
+  Future<void> confirmBooking(String slot, String date) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('Appointments').doc(date).get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic>? appointmentData = snapshot.data() as Map<String, dynamic>?;
+
+        //if (appointmentData != null && appointmentData.containsKey(slot)) {
+          //Map<String, dynamic>? slots = appointmentData[slot] as Map<String, dynamic>?;
+
+          if (appointmentData != null && appointmentData.containsKey(slot)) {
+            appointmentData[slot]['Status'] = 'booked';
+
+            // Update the document with the modified 'slots' field
+            await FirebaseFirestore.instance.collection('Appointments').doc(date).update({slot: appointmentData[slot]});
+          } else {
+            print('Slot not found in the document');
+          }
+        } else {
+          print('Invalid document structure');
+        }
+      //} else {
+        //print('Document does not exist');
+      //}
+    } catch (error) {
+      print('Error updating document: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,12 +138,8 @@ class SlotsPage extends StatelessWidget {
         title: Text('Slots for $date'),
       ),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Appointments')
-            .doc(date)
-            .snapshots(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        stream: FirebaseFirestore.instance.collection('Appointments').doc(date).snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           }
@@ -145,11 +162,10 @@ class SlotsPage extends StatelessWidget {
               var entry = slots[index];
               var slot = entry.key;
 
-              // Display the entire slot map
               return ListTile(
                 title: Text('Slot: $slot'),
-                onTap: (){
-                  showPopup(context, slot);
+                onTap: () {
+                  showPopup(context, slot, date, selectedService);
                 },
               );
             },

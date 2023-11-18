@@ -10,7 +10,8 @@ import 'Navigators.dart';
 import 'personalNotice.dart';
 import 'utils.dart';
 import 'package:salon/home/home.dart';
-import 'package:salon/home/bookAnAppointmentPage.dart';
+import 'package:salon/home/reviews.dart';
+import 'package:salon/home/viewReviews.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -65,7 +66,7 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.qr_code, color: Colors.white),
-            title: const Text('Book an appointment',
+            title: const Text('Services and appointments',
                 style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
             onTap: (){
               if(FirebaseAuth.instance.currentUser!.email != "guest@xavcomsociety.com"){
@@ -106,26 +107,19 @@ class NavBar extends StatelessWidget {
           ExpansionTile(
               leading: const Icon(Icons.book_online, color: Colors.white),
               title:
-                  const Text('Events', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
+                  const Text('Reviews', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
               children: [
                 ListTile(
-                    title: const Text('Upcoming Events',
+                    title: const Text('Write a Review',
                         style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
                     onTap: ()  {
-                      if(FirebaseAuth.instance.currentUser!.email != "guest@salon.com"){
-
-                       }
-                      else{
-                        Navigator.pop(context);
-                        Utils.showSnackBar("Please login to view upcoming events.");
-                      }
-
+                      navigation().navigateToPage(context, ReviewPage());
                         }),
                 ListTile(
-                    title: const Text('Yearly Events',
+                    title: const Text('View Reviews',
                         style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
-                    onTap: () => {
-
+                    onTap: ()  {
+                      navigation().navigateToPage(context, ReviewsViewPage());
                         }),
               ]),
           ListTile(
