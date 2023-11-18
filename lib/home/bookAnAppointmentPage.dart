@@ -38,7 +38,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
 
           return ListView.builder(
@@ -73,6 +73,43 @@ class SlotsPage extends StatelessWidget {
 
   const SlotsPage({required this.date, required this.selectedService});
 
+  confirmBooking(){
+
+  }
+
+  Future<void> showPopup(BuildContext context, String slot) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Popup Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a simple popup for $slot.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Close the popup
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+            TextButton(
+              onPressed: (){
+
+              },
+              child: const Text('Confirm'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +128,7 @@ class SlotsPage extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
 
           var documentData = snapshot.data!.data() as Map<String, dynamic>? ?? {};
@@ -112,7 +149,7 @@ class SlotsPage extends StatelessWidget {
               return ListTile(
                 title: Text('Slot: $slot'),
                 onTap: (){
-
+                  showPopup(context, slot);
                 },
               );
             },

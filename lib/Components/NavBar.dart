@@ -69,7 +69,7 @@ class NavBar extends StatelessWidget {
                 style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
             onTap: (){
               if(FirebaseAuth.instance.currentUser!.email != "guest@xavcomsociety.com"){
-                navigation().navigateToPage(context, const AppointmentsScreen());
+                navigation().navigateToPage(context, const Home());
               }
               else{
                 Navigator.pop(context);
