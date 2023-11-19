@@ -7,12 +7,14 @@ class ServiceDetailsPage extends StatelessWidget {
   final String about;
   final int cost;
   final int duration;
+  final String gender;
 
   const ServiceDetailsPage({
     required this.serviceId,
     required this.about,
     required this.cost,
     required this.duration,
+    required this.gender,
   });
 
   @override
@@ -30,7 +32,7 @@ class ServiceDetailsPage extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    'Service ID: $serviceId',
+                    'Service: $serviceId',
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -42,13 +44,19 @@ class ServiceDetailsPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Cost: $cost',
+                    'Gender: $gender',
                     style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
                   Text(
-                    'Duration: $duration',
+                    'Cost: ₹$cost',
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    'Duration: $duration mins',
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -59,7 +67,7 @@ class ServiceDetailsPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                 child: ElevatedButton(
                     onPressed: (){
-                      navigation().navigateToPage(context, AppointmentsScreen(selectedService: serviceId));
+                      navigation().navigateToPage(context, AppointmentsScreen(selectedService: serviceId, gender: gender,));
                     },
                     child: const Text(
                       'Book an appointment',

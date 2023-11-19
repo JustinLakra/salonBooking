@@ -49,12 +49,12 @@ class ReviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('Service: ${data['Service']}'),
+      title: Text('Review: ${data['Body']}'),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Rating: ${data['Rating']}'),
-          Text('Review: ${data['Body']}'),
+          Text('Service: ${data['Service']}'),
           FutureBuilder<DocumentSnapshot>(
             future: FirebaseFirestore.instance.collection('Users').doc(data['User']).get(),
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {

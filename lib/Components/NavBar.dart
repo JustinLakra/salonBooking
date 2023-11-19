@@ -12,6 +12,7 @@ import 'utils.dart';
 import 'package:salon/home/home.dart';
 import 'package:salon/home/reviews.dart';
 import 'package:salon/home/viewReviews.dart';
+import 'package:salon/home/mainPage.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -49,7 +50,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home, color: Colors.white),
             title: const Text('Home', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
-            onTap: () => {navigation().navigateToPage(context, const Home())
+            onTap: () => {navigation().navigateToPage(context, const mainPage())
                },
           ),
           ListTile(
@@ -94,14 +95,6 @@ class NavBar extends StatelessWidget {
               }
 
 
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.notifications, color: Colors.white),
-            title: const Text('Announcements',
-                style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
-            onTap: () => {
-              navigation().navigateToPage(context, const NotificationsGeneral())
             },
           ),
           ExpansionTile(

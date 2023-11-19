@@ -55,23 +55,25 @@ class _HomeState extends State<Home> {
                 var about = service['about'] ?? '';
                 var cost = service['cost'] ?? 0;
                 var duration = service['duration'] ?? 0;
+                var gender = service['gender'];
 
                 return ListTile(
-                  title: Text(service.id),
-                  subtitle: Text('Cost: $cost ₹ | Duration: $duration mins'),
-                  onTap: () {
-                    // Navigate to ServiceDetailsPage when the ListTile is tapped
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) =>
-                          ServiceDetailsPage(
-                            serviceId: service.id,
-                            about: about,
-                            cost: cost,
-                            duration: duration,
-                          ),
+                    title: Text(service.id),
+                    subtitle: Text('Cost: $cost ₹ | Duration: $duration mins | Gender: $gender'),
+                    onTap: () {
+                      // Navigate to ServiceDetailsPage when the ListTile is tapped
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>
+                            ServiceDetailsPage(
+                                serviceId: service.id,
+                                about: about,
+                                cost: cost,
+                                duration: duration,
+                                gender: gender
+                            ),
                       ),
-                    );
-                  }
+                      );
+                    }
                 );
               },
             );
