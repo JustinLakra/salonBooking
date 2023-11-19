@@ -10,6 +10,7 @@ import 'Login/auth_page.dart';
 import 'Login/verifyemail.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
+import 'package:salon/home/mainPage.dart';
 
 
 //Defining navigator key to ease the popping and pushing of routes in login, signup, etc
@@ -73,7 +74,7 @@ class MainPage extends StatelessWidget {
                 child: Text("Something Went Wrong!!"),
               );
             } else if (snapshot.hasData) {
-              return const Home();
+              return const mainPage();
             } else {
               return const AuthPage();
             }

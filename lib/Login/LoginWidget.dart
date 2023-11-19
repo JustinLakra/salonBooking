@@ -53,7 +53,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
                 height: MediaQuery.of(context).size.height * 0.3,
-                child: Image.asset("images/logo.png")),
+                child: Image.asset("assets/salonLogo.jpg")),
             const SizedBox(height: 35),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -112,12 +112,12 @@ focusedBorder: OutlineInputBorder(
             ),
             const SizedBox(height: 20),
             GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
                 child: Text(
                   'Forgot  Password?',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Colors.white,
                     fontSize: 20,
                     fontFamily: "Sarabun",
                   ),
@@ -154,7 +154,7 @@ focusedBorder: OutlineInputBorder(
                           recognizer: TapGestureRecognizer()
                             ..onTap = (){signInAsGuest();},
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
+                              color: Colors.white,
                               fontSize: 20,
                               fontFamily: "Sarabun"),
                           text: 'Login as Guest',

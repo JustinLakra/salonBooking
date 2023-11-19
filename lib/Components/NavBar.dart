@@ -13,6 +13,7 @@ import 'package:salon/home/home.dart';
 import 'package:salon/home/reviews.dart';
 import 'package:salon/home/viewReviews.dart';
 import 'package:salon/home/mainPage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -53,7 +54,7 @@ class NavBar extends StatelessWidget {
             onTap: () => {navigation().navigateToPage(context, const mainPage())
                },
           ),
-          ListTile(
+          /*ListTile(
             leading: const Icon(Icons.person, color: Colors.white),
             title: const Text('Profile', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
             onTap: ()
@@ -64,22 +65,41 @@ class NavBar extends StatelessWidget {
               Navigator.pop(context);
               Utils.showSnackBar("Please login to view profile");
                   }},
+          ),*/
+          ExpansionTile(
+            leading: const Icon(FontAwesomeIcons.scissors, color: Colors.white),
+            title: const Text('Services', style: TextStyle(fontFamily: "Open Sans",color: Colors.white),
+          ),
+          children: [
+          ListTile(
+          title: const Text("Male"),
+          onTap: () {
+            if(FirebaseAuth.instance.currentUser!.email != "guest@xavcomsociety.com"){
+              navigation().navigateToPage(
+                  context, const Home(gender: "male"));
+            }
+            else{
+              Navigator.pop(context);
+              Utils.showSnackBar("Please login to book an appointment");
+            }
+
+          },
           ),
           ListTile(
-            leading: const Icon(Icons.qr_code, color: Colors.white),
-            title: const Text('Services and appointments',
-                style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
-            onTap: (){
+          title: const Text('Female'),
+            onTap: () {
               if(FirebaseAuth.instance.currentUser!.email != "guest@xavcomsociety.com"){
-                navigation().navigateToPage(context, const Home());
+                navigation().navigateToPage(
+                    context, const Home(gender: "female"));
               }
               else{
                 Navigator.pop(context);
                 Utils.showSnackBar("Please login to book an appointment");
               }
 
-
             },
+          ),
+          ],
           ),
           ListTile(
             leading: const Icon(Icons.notifications, color: Colors.white),
@@ -115,22 +135,6 @@ class NavBar extends StatelessWidget {
                       navigation().navigateToPage(context, ReviewsViewPage());
                         }),
               ]),
-          ListTile(
-            leading: const Icon(Icons.people, color: Colors.white),
-            title: const Text('Team', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
-            onTap: ()  {
-
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.info, color: Colors.white),
-            title:
-                const Text('About Us', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
-            onTap: ()
-                {
-
-                },
-          ),
           ListTile(
             title: const Text('Log Out', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
             leading: const Icon(Icons.exit_to_app, color: Colors.white),

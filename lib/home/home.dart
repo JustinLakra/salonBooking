@@ -5,30 +5,30 @@ import '../Components/NavBar.dart';
 import 'package:salon/home/serviceDetailsPage.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String gender;
+  const Home({required this.gender});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final CollectionReference services =
-  FirebaseFirestore.instance.collection('Services');
 
   @override
   Widget build(BuildContext context) {
+    final String gender = widget.gender;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(65),
         child: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.white,
           toolbarHeight: 65,
           title: const Text(
-            "SALON 33",
+            "SHADOWZ",
             style: TextStyle(
               fontFamily: "Open Sans",
               fontSize: 40,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           centerTitle: true,
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
       drawer: const NavBar(),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: services.snapshots(),
+          stream: FirebaseFirestore.instance.collection('Services').where('gender', isEqualTo: gender).snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {

@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+import '../main.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   final String selectedService;
@@ -78,11 +81,11 @@ class SlotsPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Popup Title'),
-          content: const SingleChildScrollView(
+          title: const Text('Confirmation'),
+          content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure you want to book this slot?'),
+                Text('Are you sure you want to book $selectedService on $date for $gender from $slot?'),
               ],
             ),
           ),
@@ -96,18 +99,61 @@ class SlotsPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await confirmBooking(slot, date, selectedService, gender);
-                Navigator.of(context).pop(); // Close the popup after confirming
+                //await confirmBooking(slot, date, selectedService, gender, "Online");
+                await _showPaymentPopup(context, slot, date, selectedService, gender, "Online");
+                //Navigator.of(context).pop();// Close the popup after confirming
+                //Todo qr
               },
-              child: const Text('Confirm'),
-            )
+              child: const Text('Online Payment'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await confirmBooking(slot, date, selectedService, gender, "Offline, COD");
+                Navigator.of(context).pop();// Close the popup after confirming
+                navigatorKey.currentState!.popUntil((route) => route.isFirst);
+              },
+              child: const Text('Offline Payment'),
+            ),
           ],
         );
       },
     );
   }
+  Future<void> _showPaymentPopup (BuildContext context, String slot, String date, String service, String gender, String mode) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment Details'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                // QR code image
+                /*QrImageView(
+                  data: 'Your QR Code Data Here', // Replace with your actual data
+                  version: QrVersions.auto,
+                  size: 150,
+                ),*/
+                Image.asset('assets/qrCode.png'),
+                SizedBox(height: 16.0),
+                // Pay button
+                ElevatedButton(
+                  onPressed: () async{
+                    await confirmBooking(slot, date, selectedService, gender, "Online");
+                    Navigator.of(context).pop();
+                    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+                  },
+                  child: Text('Pay'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-  Future<void> confirmBooking(String slot, String date, String service, String gender) async {
+  Future<void> confirmBooking(String slot, String date, String service, String gender, String mode) async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('Appointments').doc(date).get();
 
@@ -122,9 +168,21 @@ class SlotsPage extends StatelessWidget {
             appointmentData[slot]['Service'] = '$service - $gender';
             appointmentData[slot]['Availability'] = 'booked';
             appointmentData[slot]['User'] = FirebaseAuth.instance.currentUser!.uid;
+            appointmentData[slot]['Mode'] = mode;
 
             // Update the document with the modified 'slots' field
             await FirebaseFirestore.instance.collection('Appointments').doc(date).update({slot: appointmentData[slot]});
+            var now = DateTime.now();
+            String time = now.day.toString() + '/' + now.month.toString() + '/' + now.year.toString()+ "," +now.hour.toString() + ':' + now.minute.toString();
+
+            return await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+              'Notifications.${"You have succesfully booked " + service + " for " + gender + " on " + date  + " from " + slot + " !" + "Your payment mode is " + mode + "forbidden_character_period"}':
+              time,
+
+            }
+
+            );
+
           } else {
             print('Slot not found in the document');
           }
@@ -183,3 +241,5 @@ class SlotsPage extends StatelessWidget {
     );
   }
 }
+
+

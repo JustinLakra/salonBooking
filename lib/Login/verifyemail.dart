@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:salon/home/mainPage.dart';
 
 import '../Components/myButton.dart';
 import '../Components/utils.dart';
 import '../home/home.dart';
+
 
 //deals with statuis of email verification
 class VerifyEmailPage extends StatefulWidget {
@@ -66,7 +68,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   //if user is verified, returns home, else stays on verification page
   Widget build(BuildContext context) {
     return isEmailVerified
-      ? const Home()
+      ? const mainPage()
       : Scaffold(
           backgroundColor: HexColor("#4d4d4d"),
           appBar: AppBar(
