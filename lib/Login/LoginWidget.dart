@@ -141,26 +141,6 @@ focusedBorder: OutlineInputBorder(
               text: 'No account? Sign Up!',
             )),
                 const SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.lightBlue,
-                  ),
-
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                        text: TextSpan(
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = (){signInAsGuest();},
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: "Sarabun"),
-                          text: 'Login as Guest',
-                        )),
-                  ),
-                ),
           ]),
         ),
       )),

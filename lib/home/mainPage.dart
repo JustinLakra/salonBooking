@@ -20,12 +20,12 @@ class mainPage extends StatefulWidget {
 
 class _mainPageState extends State<mainPage> {
   final List<String> images = [
-    "https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/Theme%20Launch-min.JPG?alt=media&token=0ccaed79-17d9-469f-86be-4bc19e6d1cc9",
-    "https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/Proffinal.jpg?alt=media&token=dac6cb4b-6b30-4113-81f1-264eb9df325f",
-    "https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/core.JPG?alt=media&token=e906fad4-0f62-4803-96c9-a7644d2ce086",
-    "https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/interview.jpg?alt=media&token=d9c4c9f2-e6b9-41d8-befd-6e9bc7439d80",
-    "https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/GD.jpeg.jpg?alt=media&token=fc2d83e7-fe80-40d0-8159-6239bf115aca",
-    "https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/Board%20Game.JPG?alt=media&token=48a4df2d-abce-4c69-81fd-2c7f7bd69710",
+    "https://img.freepik.com/free-photo/young-man-barbershop-trimming-hair_1303-26256.jpg?w=996&t=st=1700427583~exp=1700428183~hmac=fd998e0b62fb42ba7a8c036154d53dded8ed316e5aa6dfcf605a455a9572fb0e",
+    "https://img.freepik.com/free-photo/female-hairdresser-using-hairbrush-hair-dryer_329181-1929.jpg?w=996&t=st=1700427610~exp=1700428210~hmac=a791f1942313fdfc42a893582696c40a48b667371d0d1cbfc046cf5728190b34",
+    "https://img.freepik.com/free-photo/client-doing-hair-cut-barber-shop-salon_1303-20710.jpg?w=996&t=st=1700427637~exp=1700428237~hmac=4d0c0b62af7b20edd6332449e047650b9be8d2c4b2657502431deec6f805cda4",
+    "https://img.freepik.com/free-photo/beautician-with-brush-applies-white-moisturizing-mask-face-young-girl-client-spa-beauty-salon_343596-4247.jpg?w=996&t=st=1700427676~exp=1700428276~hmac=bb0492633c5622d54bca78974007e22dcebcebf514dd33cdbbe8b0b5b0275d39",
+    //"https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/GD.jpeg.jpg?alt=media&token=fc2d83e7-fe80-40d0-8159-6239bf115aca",
+    //"https://firebasestorage.googleapis.com/v0/b/xcode-xcs.appspot.com/o/Board%20Game.JPG?alt=media&token=48a4df2d-abce-4c69-81fd-2c7f7bd69710",
   ];
   final PageController _pageController = PageController(initialPage: 0);
   Timer? _timer;
@@ -224,28 +224,6 @@ Open:Monday-Sunday 11am - 8:30pm""",
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-                Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            navigation().navigateToPage(context, const Scaffold());
-                          },
-                          child: const Text(
-                            "Tap to read more about our story",
-                            style: TextStyle(
-                              fontFamily: "Open Sans",
-                              decorationStyle: TextDecorationStyle.solid,
-                              color: Colors.amber,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          )
-                              .animate()
-                              .fadeIn(duration: const Duration(milliseconds: 700)),
-                        )),
-                  ),
-                ),
                 const SizedBox(height: 20),
               ]),
         ));
