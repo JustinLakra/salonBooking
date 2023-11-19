@@ -67,7 +67,7 @@ class ServiceDetailsPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                 child: ElevatedButton(
                     onPressed: (){
-                      navigation().navigateToPage(context, AppointmentsScreen(selectedService: serviceId, gender: gender,));
+                      navigation().navigateToPage(context, AppointmentsScreen(selectedService: serviceId, gender: gender,cost: cost));
                     },
                     child: const Text(
                       'Book an appointment',

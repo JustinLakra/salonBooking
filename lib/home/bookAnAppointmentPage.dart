@@ -8,8 +8,9 @@ import '../main.dart';
 class AppointmentsScreen extends StatefulWidget {
   final String selectedService;
   final String gender;
+  final int cost;
 
-  const AppointmentsScreen({Key? key, required this.selectedService, required this.gender}) : super(key: key);
+  const AppointmentsScreen({Key? key, required this.selectedService, required this.gender, required this.cost}) : super(key: key);
 
   @override
   State<AppointmentsScreen> createState() => _AppointmentsScreenState();
@@ -18,6 +19,7 @@ class AppointmentsScreen extends StatefulWidget {
 class _AppointmentsScreenState extends State<AppointmentsScreen> {
   late String selectedService;
   late String gender;
+  late int cost;
   final CollectionReference appointments = FirebaseFirestore.instance.collection('Appointments');
 
   @override
@@ -25,6 +27,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
     super.initState();
     selectedService = widget.selectedService;
     gender = widget.gender;
+    cost = widget.cost;
   }
 
   @override
@@ -56,7 +59,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SlotsPage(date: date, selectedService: selectedService, gender: gender,),
+                      builder: (context) => SlotsPage(date: date, selectedService: selectedService, gender: gender, cost: cost),
                     ),
                   );
                 },
@@ -73,8 +76,9 @@ class SlotsPage extends StatelessWidget {
   final String date;
   final String selectedService;
   final String gender;
+  final int cost;
 
-  const SlotsPage({required this.date, required this.selectedService, required this.gender});
+  const SlotsPage({required this.date, required this.selectedService, required this.gender, required this.cost});
 
   Future<void> showPopup(BuildContext context, String slot, String date, String selectedService, String gender) async {
     return showDialog<void>(
@@ -100,7 +104,7 @@ class SlotsPage extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 //await confirmBooking(slot, date, selectedService, gender, "Online");
-                await _showPaymentPopup(context, slot, date, selectedService, gender, "Online");
+                await _showPaymentPopup(context, slot, date, selectedService, gender, "Online", cost);
                 //Navigator.of(context).pop();// Close the popup after confirming
                 //Todo qr
               },
@@ -108,7 +112,7 @@ class SlotsPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await confirmBooking(slot, date, selectedService, gender, "Offline, COD");
+                await confirmBooking(slot, date, selectedService, gender, "Offline, COD", cost);
                 Navigator.of(context).pop();// Close the popup after confirming
                 navigatorKey.currentState!.popUntil((route) => route.isFirst);
               },
@@ -119,7 +123,7 @@ class SlotsPage extends StatelessWidget {
       },
     );
   }
-  Future<void> _showPaymentPopup (BuildContext context, String slot, String date, String service, String gender, String mode) async {
+  Future<void> _showPaymentPopup (BuildContext context, String slot, String date, String service, String gender, String mode, int cost) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -139,7 +143,7 @@ class SlotsPage extends StatelessWidget {
                 // Pay button
                 ElevatedButton(
                   onPressed: () async{
-                    await confirmBooking(slot, date, selectedService, gender, "Online");
+                    await confirmBooking(slot, date, selectedService, gender, "Online", cost);
                     Navigator.of(context).pop();
                     navigatorKey.currentState!.popUntil((route) => route.isFirst);
                   },
@@ -153,7 +157,7 @@ class SlotsPage extends StatelessWidget {
     );
   }
 
-  Future<void> confirmBooking(String slot, String date, String service, String gender, String mode) async {
+  Future<void> confirmBooking(String slot, String date, String service, String gender, String mode, int cost) async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('Appointments').doc(date).get();
 
@@ -176,7 +180,7 @@ class SlotsPage extends StatelessWidget {
             String time = now.day.toString() + '/' + now.month.toString() + '/' + now.year.toString()+ "," +now.hour.toString() + ':' + now.minute.toString();
 
             return await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
-              'Notifications.${"You have succesfully booked " + service + " for " + gender + " on " + date  + " from " + slot + " !" + "Your payment mode is " + mode + "forbidden_character_period"}':
+              'Notifications.${"You have succesfully booked " + service + " for " + gender + " on " + date  + " from " + slot + " for  ₹" + cost.toString() + " !" + "Your payment mode is " + mode + "forbidden_character_period"}':
               time,
 
             }
