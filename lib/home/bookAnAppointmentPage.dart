@@ -112,9 +112,10 @@ class SlotsPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await confirmBooking(slot, date, selectedService, gender, "Offline, COD", cost);
+                await confirmBooking(slot, date, selectedService, gender, "Offline", cost);
                 Navigator.of(context).pop();// Close the popup after confirming
-                navigatorKey.currentState!.popUntil((route) => route.isFirst);
+                successPopup(context, "Offline");
+                //navigatorKey.currentState!.popUntil((route) => route.isFirst);
               },
               child: const Text('Offline Payment'),
             ),
@@ -128,7 +129,7 @@ class SlotsPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Payment Details'),
+          title: const Text('Payment Details'),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
@@ -138,16 +139,17 @@ class SlotsPage extends StatelessWidget {
                   version: QrVersions.auto,
                   size: 150,
                 ),*/
-                Image.asset('assets/qrCode.png'),
-                SizedBox(height: 16.0),
+                Image.asset('assets/qr_code.png'),
+                const SizedBox(height: 16.0),
                 // Pay button
                 ElevatedButton(
                   onPressed: () async{
                     await confirmBooking(slot, date, selectedService, gender, "Online", cost);
                     Navigator.of(context).pop();
-                    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+                    successPopup(context, "Online");
+                    //navigatorKey.currentState!.popUntil((route) => route.isFirst);
                   },
-                  child: Text('Pay'),
+                  child: const Text('Pay'),
                 ),
               ],
             ),
@@ -157,6 +159,36 @@ class SlotsPage extends StatelessWidget {
     );
   }
 
+  void successPopup(BuildContext context, String mode) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Icon(
+                Icons.thumb_up,
+                color: Colors.green,
+                size: 30.0,
+              ),
+              SizedBox(width: 10.0),
+              Text('Booked Successfully'),
+            ],
+          ),
+          content: Text('Payment mode: $mode'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                navigatorKey.currentState!.popUntil((route) => route.isFirst);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<void> confirmBooking(String slot, String date, String service, String gender, String mode, int cost) async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('Appointments').doc(date).get();

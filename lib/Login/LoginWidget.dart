@@ -134,8 +134,8 @@ focusedBorder: OutlineInputBorder(
                 text: TextSpan(
               recognizer: TapGestureRecognizer()
                 ..onTap = widget.onClickedSignUp,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
+              style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 20,
                   fontFamily: "Sarabun"),
               text: 'No account? Sign Up!',

@@ -72,7 +72,7 @@ class NavBar extends StatelessWidget {
           ),
           children: [
           ListTile(
-          title: const Text("Male"),
+          title: const Text("Male", style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
           onTap: () {
             if(FirebaseAuth.instance.currentUser!.email != "guest@xavcomsociety.com"){
               navigation().navigateToPage(
@@ -86,7 +86,7 @@ class NavBar extends StatelessWidget {
           },
           ),
           ListTile(
-          title: const Text('Female'),
+          title: const Text('Female', style: TextStyle(fontFamily: "Open Sans",color: Colors.white)),
             onTap: () {
               if(FirebaseAuth.instance.currentUser!.email != "guest@xavcomsociety.com"){
                 navigation().navigateToPage(
